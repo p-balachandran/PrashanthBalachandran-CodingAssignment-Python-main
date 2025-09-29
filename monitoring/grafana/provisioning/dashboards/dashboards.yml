@@ -1,0 +1,13 @@
+apiVersion: 1
+
+providers:
+  - name: 'Perf Travel Dashboards'
+    orgId: 1
+    folder: 'Perf Travel'
+    type: file
+    disableDeletion: false
+    allowUiUpdates: false
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true

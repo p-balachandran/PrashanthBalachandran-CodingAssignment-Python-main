@@ -1,0 +1,42 @@
+services:
+  app:
+    build:
+      context: ..                 # 👈 repo root (where package.json lives)
+      dockerfile: docker/Dockerfile
+    container_name: perf-travel-app
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks: [perfnet]
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: perf-prometheus
+    command: ['--config.file=/etc/prometheus/prometheus.yml']
+    volumes:
+      - ../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro  # 👈 note ..
+    ports:
+      - "9090:9090"
+    depends_on: [app]
+    networks: [perfnet]
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: perf-grafana
+    user: root
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ../monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ../monitoring/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ../monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - "3000:3000"
+    depends_on: [prometheus]
+    networks: [perfnet]
+
+networks:
+  perfnet: {}

@@ -1,0 +1,14 @@
+{
+  "name": "perf-flight-app",
+  "version": "1.0.0",
+  "description": "Performance test app with login and flight search",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.18.2",
+    "prom-client": "^15.1.3"
+  }
+}
